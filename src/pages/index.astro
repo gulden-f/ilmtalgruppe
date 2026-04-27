@@ -1,0 +1,305 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Notice from '../components/Notice.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { marked } from 'marked';
+
+// Load CMS-managed content
+import contact from '../content/settings/contact.json';
+import statsData from '../content/settings/stats.json';
+
+const allNotices = await getCollection('notices');
+const activeNotices = allNotices
+  .filter(n => n.data.active)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const allTeam = await getCollection('team');
+const team = allTeam.sort((a, b) => a.data.order - b.data.order);
+
+const leitung = team.filter(t => t.data.department === 'Leitung');
+const verwaltung = team.filter(t => t.data.department === 'Verwaltung');
+const technik = team.filter(t => t.data.department === 'Technik');
+
+// Initials helper
+function initials(name: string) {
+  return name.split(' ').map(n => n[0]).join('').slice(0, 2);
+}
+
+const services = [
+  { title: 'Trinkwasserversorgung', desc: 'Zuverlässige Lieferung von qualitativ hochwertigem Trinkwasser in das gesamte Versorgungsgebiet – täglich und verlässlich.', icon: 'water' },
+  { title: 'Wasserschutzgebiete', desc: 'Schutz der Wasserquellen und Grundwasservorkommen durch ausgewiesene Schutzzonen im Landkreis Pfaffenhofen.', icon: 'shield' },
+  { title: 'Beiträge & Verwaltung', desc: 'Bearbeitung von Anschlussanträgen, Neuherstellungsbeiträgen und Verbrauchsabrechnungen für alle Mitglieder.', icon: 'office' },
+  { title: 'Wasserqualität', desc: 'Regelmäßige Analyse und Überwachung der Trinkwasserqualität gemäß Trinkwasserverordnung und gesetzlichen Vorgaben.', icon: 'chart' },
+  { title: 'Bereitschaftsdienst', desc: '24/7-Notfallservice bei Rohrbrüchen, Druckabfällen und Versorgungsstörungen im gesamten Netzgebiet.', icon: 'clock' },
+  { title: 'Online-Kundenportal', desc: 'Digitale Verwaltung Ihrer Verbrauchsdaten, Anträge und Dokumente über das gesicherte Komuna-Serviceportal.', icon: 'monitor' },
+];
+
+const svgIcons: Record<string, string> = {
+  water: `<path d="M12 2c0 0-8 6.5-8 12a8 8 0 0 0 16 0C20 8.5 12 2 12 2z"/>`,
+  shield: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`,
+  office: `<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>`,
+  chart: `<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>`,
+  clock: `<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`,
+  monitor: `<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>`,
+};
+---
+
+<Base>
+  <Nav />
+
+  <Hero stats={statsData.items} />
+
+  <!-- NOTICES -->
+  <section id="aktuelles">
+    <div class="container">
+      <div class="section-label">Aktuelles</div>
+      <div class="section-title">Hinweise & Bekanntmachungen</div>
+
+      {activeNotices.length === 0 && (
+        <p class="section-body" style="margin-top:1rem; color: var(--text-muted);">Derzeit keine aktuellen Hinweise.</p>
+      )}
+      {activeNotices.map(async notice => {
+        const html = await marked(notice.body);
+        return <Notice title={notice.data.title} type={notice.data.type} body={html} />;
+      })}
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SERVICES -->
+  <section id="leistungen">
+    <div class="container">
+      <div class="section-label">Unsere Leistungen</div>
+      <div class="section-title">Was wir für Sie tun</div>
+      <div class="services-grid">
+        {services.map(s => (
+          <div class="service-card">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" set:html={svgIcons[s.icon]} />
+            </div>
+            <div class="service-title">{s.title}</div>
+            <div class="service-desc">{s.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- OPENING HOURS -->
+  <section style="background: var(--surface);">
+    <div class="container">
+      <div class="section-label">Erreichbarkeit</div>
+      <div class="section-title">Öffnungszeiten</div>
+      <p class="section-body">Unser Büro in Starzhausen steht Ihnen zu folgenden Zeiten zur Verfügung. In Notfällen sind wir rund um die Uhr erreichbar.</p>
+      <div class="hours-grid">
+        <div class="hours-card">
+          <div class="hours-card-title">Bürostunden — Starzhausen</div>
+          {contact.hours.map(h => (
+            <div class="hours-row">
+              <span class="hours-day">{h.day}</span>
+              <span class="hours-time" style={h.closed ? 'color:var(--text-muted);font-weight:400' : ''}>{h.time}</span>
+            </div>
+          ))}
+        </div>
+        <div class="emergency-card">
+          <div>
+            <div class="emergency-label">Notfallnummer — 24 Stunden, 7 Tage</div>
+            <div class="emergency-num">{contact.emergency_phone}</div>
+            <div class="emergency-desc">Rufbereitschaftsdienst bei Wassernotfällen, Rohrbrüchen, Druckausfällen und Versorgungsstörungen.</div>
+          </div>
+          <div class="emergency-badge">
+            <span style="width:6px;height:6px;border-radius:50%;background:#5DCAA5;display:inline-block;"></span>
+            Immer erreichbar
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TEAM -->
+  <section id="team">
+    <div class="container">
+      <div class="section-label">Ihr Team</div>
+      <div class="section-title">Ansprechpartner</div>
+      <p class="section-body">Unser engagiertes Team steht Ihnen für alle Fragen rund um Ihre Wasserversorgung zur Verfügung.</p>
+
+      {[
+        { label: 'Leitung', members: leitung, color: 'var(--water-pale)', textColor: 'var(--water-deep)' },
+        { label: 'Verwaltung', members: verwaltung, color: 'var(--water-pale)', textColor: 'var(--water-deep)' },
+        { label: 'Technik', members: technik, color: 'var(--teal-pale)', textColor: 'var(--teal-deep)' },
+      ].map(group => group.members.length > 0 && (
+        <div style="margin-top: 2rem;">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.75rem;">{group.label}</div>
+          <div class="team-grid">
+            {group.members.map(m => (
+              <div class="team-card">
+                <div class="team-avatar" style={`background:${group.color};color:${group.textColor}`}>
+                  {initials(m.data.name)}
+                </div>
+                <div class="team-name">{m.data.name}</div>
+                <div class="team-role">{m.data.role}</div>
+                <div class="team-contact">
+                  <a href={`tel:${m.data.phone.replace(/\s/g,'')}`}>{m.data.phone}</a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- AREA -->
+  <section id="gebiet" style="background: var(--teal-pale);">
+    <div class="container">
+      <div class="section-label">Versorgungsgebiet</div>
+      <div class="section-title">Mitgliedsgemeinden</div>
+      <p class="section-body">Der Zweckverband versorgt mehrere Kommunen im Landkreis Pfaffenhofen a. d. Ilm. Die Rechtsaufsicht liegt beim Landratsamt Pfaffenhofen, die Fachaufsicht beim Wasserwirtschaftsamt Ingolstadt.</p>
+      <div class="area-tags">
+        <span class="area-tag primary">Stadt Geisenfeld</span>
+        <span class="area-tag primary">Markt Wolnzach</span>
+        <span class="area-tag primary">Stadt Pfaffenhofen a. d. Ilm</span>
+        <span class="area-tag primary">Gemeinde Rohrbach</span>
+        <span class="area-tag">OT Starzhausen</span>
+        <span class="area-tag">OT Schillwitzried</span>
+      </div>
+      <div class="authority-bar">
+        <div>
+          <div class="authority-label">Rechtsaufsicht</div>
+          <div class="authority-val">Landratsamt Pfaffenhofen a. d. Ilm</div>
+        </div>
+        <div>
+          <div class="authority-label">Fachaufsicht</div>
+          <div class="authority-val">Wasserwirtschaftsamt Ingolstadt</div>
+        </div>
+        <div>
+          <div class="authority-label">Rechtsform</div>
+          <div class="authority-val">Körperschaft des öffentlichen Rechts</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="kontakt">
+    <div class="container">
+      <div class="section-label">Kontakt</div>
+      <div class="section-title">So erreichen Sie uns</div>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>Geschäftsstelle Starzhausen</h3>
+          <div class="contact-row"><span class="contact-key">Adresse</span><span class="contact-val">{contact.address1}<br/>{contact.address2}</span></div>
+          <div class="contact-row"><span class="contact-key">Büro</span><span class="contact-val"><a href={`tel:${contact.office_phone.replace(/\s/g,'')}`}>{contact.office_phone}</a></span></div>
+          <div class="contact-row"><span class="contact-key">Technik</span><span class="contact-val"><a href={`tel:${contact.tech_phone.replace(/\s/g,'')}`}>{contact.tech_phone}</a></span></div>
+          <div class="contact-row"><span class="contact-key">Fax</span><span class="contact-val">{contact.fax}</span></div>
+          <div class="contact-row"><span class="contact-key">E-Mail</span><span class="contact-val"><a href={`mailto:${contact.email}`}>{contact.email}</a></span></div>
+        </div>
+        <div class="contact-card">
+          <h3>Online-Services & Portal</h3>
+          <div class="contact-row">
+            <span class="contact-key">Portal</span>
+            <span class="contact-val">
+              <a href="https://service-portal.komuna.net" target="_blank">service-portal.komuna.net</a>
+              <br/><span style="font-size:11px;color:var(--text-muted);">Anträge, Verbrauchsdaten & Dokumente</span>
+            </span>
+          </div>
+          <div class="contact-row"><span class="contact-key">Datenschutz</span><span class="contact-val"><a href="/datenschutz">Datenschutzerklärung & DSGVO</a></span></div>
+          <div class="contact-row"><span class="contact-key">Impressum</span><span class="contact-val"><a href="/impressum">Impressum ansehen</a></span></div>
+          <a href="https://service-portal.komuna.net" target="_blank" class="contact-btn">Online-Service öffnen →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<style>
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+    border-radius: 14px; overflow: hidden;
+    margin-top: 2.25rem; border: 1px solid var(--border);
+  }
+  .service-card { background: var(--white); padding: 1.75rem; transition: background 0.2s; }
+  .service-card:hover { background: var(--water-pale); }
+  .service-icon {
+    width: 44px; height: 44px; border-radius: 11px;
+    background: var(--water-pale); display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.1rem;
+  }
+  .service-title { font-size: 14px; font-weight: 500; color: var(--water-deep); margin-bottom: 7px; }
+  .service-desc { font-size: 12.5px; color: var(--text-soft); line-height: 1.65; }
+
+  .hours-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.25rem; }
+  .hours-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+  .hours-card-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .07em; color: var(--text-muted); margin-bottom: 1.1rem; }
+  .hours-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .hours-row:last-child { border-bottom: none; }
+  .hours-day { color: var(--text-soft); }
+  .hours-time { font-weight: 500; color: var(--water-deep); }
+  .emergency-card {
+    background: var(--water-deep); border-radius: 12px; padding: 1.75rem;
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .emergency-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--water-pale2); }
+  .emergency-num { font-family: var(--ff-display); font-size: 1.6rem; color: var(--white); }
+  .emergency-desc { font-size: 12.5px; color: rgba(255,255,255,0.58); line-height: 1.6; }
+  .emergency-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(93,202,165,0.15); border: 1px solid rgba(93,202,165,0.3);
+    border-radius: 100px; padding: 4px 12px; font-size: 11px; color: #9FE1CB;
+  }
+
+  .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .team-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: box-shadow 0.2s; }
+  .team-card:hover { box-shadow: 0 4px 24px rgba(24,95,165,0.1); }
+  .team-avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--ff-display); font-size: 17px; margin: 0 auto 0.9rem;
+  }
+  .team-name { font-size: 14px; font-weight: 500; color: var(--water-deep); margin-bottom: 4px; }
+  .team-role { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+  .team-contact a { font-size: 12px; color: var(--water-mid); text-decoration: none; }
+  .team-contact a:hover { text-decoration: underline; }
+
+  .area-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.75rem; }
+  .area-tag { background: white; border: 1px solid rgba(15,110,86,0.2); color: var(--teal-deep); border-radius: 100px; padding: 6px 16px; font-size: 12.5px; }
+  .area-tag.primary { background: var(--teal-mid); color: white; border-color: var(--teal-mid); }
+  .authority-bar {
+    margin-top: 1.5rem; padding: 1.25rem; background: white; border-radius: 10px;
+    border: 1px solid rgba(15,110,86,0.15); display: flex; gap: 2.5rem; flex-wrap: wrap;
+  }
+  .authority-label { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--teal-mid); margin-bottom: 4px; }
+  .authority-val { font-size: 13px; color: var(--teal-deep); font-weight: 500; }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.25rem; }
+  .contact-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; }
+  .contact-card h3 { font-size: 13px; font-weight: 500; color: var(--water-deep); margin-bottom: 1.1rem; }
+  .contact-row { display: flex; gap: 12px; margin-bottom: .9rem; align-items: flex-start; }
+  .contact-key { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; min-width: 64px; padding-top: 2px; }
+  .contact-val { font-size: 13px; color: var(--text-soft); line-height: 1.55; }
+  .contact-val a { color: var(--water-mid); text-decoration: none; }
+  .contact-val a:hover { text-decoration: underline; }
+  .contact-btn {
+    display: inline-block; margin-top: 1.25rem;
+    background: var(--water-deep); color: white; border: none; border-radius: 8px;
+    padding: 9px 18px; font-size: 12.5px; font-weight: 500; cursor: pointer;
+    font-family: var(--ff-body); transition: background .2s; text-decoration: none;
+  }
+  .contact-btn:hover { background: var(--water-mid); }
+
+  @media (max-width: 700px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .hours-grid, .team-grid, .contact-grid { grid-template-columns: 1fr; }
+  }
+</style>

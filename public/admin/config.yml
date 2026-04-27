@@ -1,0 +1,87 @@
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/ilmtalgruppe-website
+  branch: main
+
+# Uncomment for local development without GitHub auth:
+# local_backend: true
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  # ── NOTICES (Hinweise / Bekanntmachungen) ──────────────────────────────
+  - name: "notices"
+    label: "Hinweise & Aktuelles"
+    label_singular: "Hinweis"
+    folder: "src/content/notices"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Titel", name: "title", widget: "string" }
+      - { label: "Aktiv (anzeigen?)", name: "active", widget: "boolean", default: true }
+      - { label: "Typ", name: "type", widget: "select", options: ["info", "warning", "success"], default: "warning" }
+      - { label: "Inhalt", name: "body", widget: "markdown" }
+      - { label: "Datum", name: "date", widget: "datetime" }
+
+  # ── OPENING HOURS ───────────────────────────────────────────────────────
+  - name: "settings"
+    label: "Einstellungen"
+    files:
+      - label: "Öffnungszeiten & Kontakt"
+        name: "contact"
+        file: "src/content/settings/contact.json"
+        fields:
+          - label: "Öffnungszeiten"
+            name: "hours"
+            widget: "list"
+            fields:
+              - { label: "Tag", name: "day", widget: "string" }
+              - { label: "Zeit", name: "time", widget: "string" }
+              - { label: "Geschlossen", name: "closed", widget: "boolean", default: false }
+          - { label: "Notfallnummer", name: "emergency_phone", widget: "string" }
+          - { label: "Büro Telefon", name: "office_phone", widget: "string" }
+          - { label: "Technik Telefon", name: "tech_phone", widget: "string" }
+          - { label: "Fax", name: "fax", widget: "string" }
+          - { label: "E-Mail", name: "email", widget: "string" }
+          - { label: "Adresse Zeile 1", name: "address1", widget: "string" }
+          - { label: "Adresse Zeile 2", name: "address2", widget: "string" }
+
+      - label: "Statistiken (Hero)"
+        name: "stats"
+        file: "src/content/settings/stats.json"
+        fields:
+          - label: "Statistiken"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Zahl / Wert", name: "value", widget: "string" }
+              - { label: "Beschriftung", name: "label", widget: "string" }
+
+  # ── TEAM ────────────────────────────────────────────────────────────────
+  - name: "team"
+    label: "Team / Ansprechpartner"
+    label_singular: "Person"
+    folder: "src/content/team"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Funktion / Rolle", name: "role", widget: "string" }
+      - { label: "Telefon", name: "phone", widget: "string" }
+      - { label: "E-Mail", name: "email", widget: "string", required: false }
+      - { label: "Abteilung", name: "department", widget: "select", options: ["Leitung", "Verwaltung", "Technik", "Datenschutz"] }
+      - { label: "Reihenfolge", name: "order", widget: "number", default: 99 }
+
+  # ── SERVICES ────────────────────────────────────────────────────────────
+  - name: "services"
+    label: "Leistungen"
+    label_singular: "Leistung"
+    folder: "src/content/services"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Titel", name: "title", widget: "string" }
+      - { label: "Beschreibung", name: "description", widget: "text" }
+      - { label: "Icon (SVG path)", name: "icon", widget: "string", required: false }
+      - { label: "Reihenfolge", name: "order", widget: "number", default: 99 }

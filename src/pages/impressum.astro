@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+<Base title="Impressum – Zweckverband Wasserversorgung Ilmtalgruppe">
+  <Nav />
+  <section>
+    <div class="container" style="max-width: 720px;">
+      <div class="section-label">Rechtliches</div>
+      <div class="section-title">Impressum</div>
+      <div class="prose">
+        <h2>Angaben gemäß § 5 TMG</h2>
+        <p>
+          Zweckverband Wasserversorgung Ilmtalgruppe<br/>
+          Körperschaft des öffentlichen Rechts<br/>
+          Hofmarkstraße 32<br/>
+          85283 Wolnzach OT Starzhausen
+        </p>
+        <p>
+          Vertreten durch Verbandsvorsitzenden Günter Böhm
+        </p>
+        <h2>Kontakt</h2>
+        <p>
+          Telefon: 08442 956959-0<br/>
+          Telefax: 08442 956959-99<br/>
+          E-Mail: <a href="mailto:info@ilmtalgruppe.de">info@ilmtalgruppe.de</a>
+        </p>
+        <h2>Aufsichtsbehörde</h2>
+        <p>
+          Rechtsaufsicht: Landratsamt Pfaffenhofen a. d. Ilm<br/>
+          Fachaufsicht: Wasserwirtschaftsamt Ingolstadt
+        </p>
+        <h2>Haftungsausschluss</h2>
+        <p>Der Zweckverband Wasserversorgung Ilmtalgruppe und seine Bediensteten haften nicht für Schäden, die durch die Nutzung oder Nichtnutzung der in diesem Internetauftritt angebotenen Informationen entstehen. Der Haftungsausschluss gilt nicht, soweit die Vorschriften des § 839 BGB (Haftung bei Amtspflichtverletzung) einschlägig sind.</p>
+      </div>
+    </div>
+  </section>
+  <Footer />
+</Base>
+
+<style>
+  .prose h2 { font-family: var(--ff-display); font-size: 1.3rem; color: var(--water-deep); margin: 2rem 0 0.75rem; }
+  .prose p { font-size: 14px; color: var(--text-soft); line-height: 1.75; margin-bottom: 1rem; }
+  .prose a { color: var(--water-mid); }
+</style>

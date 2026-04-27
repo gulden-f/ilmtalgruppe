@@ -1,0 +1,58 @@
+---
+---
+<style>
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 68px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 20px rgba(4,44,83,0.06);
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--water-deep);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .nav-logo svg { width: 22px; height: 22px; }
+  .nav-name { font-size: 12px; font-weight: 500; line-height: 1.4; color: var(--water-deep); max-width: 200px; }
+  .nav-links { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-links a {
+    font-size: 13px; color: var(--text-soft); text-decoration: none;
+    padding: 4px 0; border-bottom: 1.5px solid transparent; transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--water-mid); border-bottom-color: var(--water-light); }
+  .nav-cta {
+    background: var(--water-deep) !important; color: var(--white) !important;
+    border-radius: 7px; padding: 7px 16px !important;
+    border-bottom: none !important; font-weight: 500 !important; font-size: 12px !important;
+  }
+  .nav-cta:hover { background: var(--water-mid) !important; }
+  .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; }
+  @media (max-width: 700px) {
+    .nav-links { display: none; }
+    .hamburger { display: block; }
+  }
+</style>
+
+<nav>
+  <a class="nav-brand" href="/">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2c0 0-8 6.5-8 12a8 8 0 0 0 16 0C20 8.5 12 2 12 2z"/>
+        <path d="M9 14a3.5 3.5 0 0 0 4.5.5" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="nav-name">Zweckverband Wasserversorgung<br>Ilmtalgruppe Starzhausen</div>
+  </a>
+  <div class="nav-links">
+    <a href="#aktuelles">Aktuelles</a>
+    <a href="#leistungen">Leistungen</a>
+    <a href="#team">Ansprechpartner</a>
+    <a href="#gebiet">Versorgungsgebiet</a>
+    <a href="#kontakt">Kontakt</a>
+    <a href="#kontakt" class="nav-cta">Online-Service</a>
+  </div>
+</nav>

@@ -1,0 +1,14 @@
+{
+  "hours": [
+    { "day": "Montag – Donnerstag", "time": "08:00 – 12:00 & 13:30 – 16:00", "closed": false },
+    { "day": "Freitag", "time": "08:00 – 11:00", "closed": false },
+    { "day": "Samstag & Sonntag", "time": "Geschlossen", "closed": true }
+  ],
+  "emergency_phone": "0152 02736159",
+  "office_phone": "08442 956959-0",
+  "tech_phone": "08442 956959-30",
+  "fax": "08442 956959-99",
+  "email": "info@ilmtalgruppe.de",
+  "address1": "Hofmarkstraße 32",
+  "address2": "85283 Wolnzach OT Starzhausen"
+}

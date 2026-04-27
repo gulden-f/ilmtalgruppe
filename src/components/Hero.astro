@@ -1,0 +1,97 @@
+---
+interface Props {
+  stats: Array<{ value: string; label: string }>;
+}
+const { stats } = Astro.props;
+---
+<style>
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 6rem 2.5rem 5rem;
+    background: linear-gradient(150deg, var(--water-deep) 0%, #0C447C 55%, #185FA5 100%);
+    min-height: 460px; display: flex; align-items: center;
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.05;
+    background-image:
+      repeating-linear-gradient(90deg, white 0, white 1px, transparent 0, transparent 50%),
+      repeating-linear-gradient(180deg, white 0, white 1px, transparent 0, transparent 50%);
+    background-size: 44px 44px;
+  }
+  .hero-waves { position: absolute; bottom: 0; left: 0; right: 0; }
+  .hero-content { position: relative; z-index: 2; max-width: 640px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9);
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 100px;
+    padding: 5px 14px; font-size: 11px; font-weight: 500;
+    letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.5rem;
+  }
+  .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #5DCAA5; }
+  h1 {
+    font-family: var(--ff-display); font-size: 3.4rem; font-weight: 400;
+    color: var(--white); line-height: 1.08; margin-bottom: 1.25rem; letter-spacing: -0.02em;
+  }
+  h1 em { font-style: italic; color: var(--water-pale2); }
+  .hero-sub {
+    font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.7;
+    margin-bottom: 2.25rem; max-width: 480px;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--white); color: var(--water-deep); border: none;
+    border-radius: 8px; padding: 11px 22px; font-size: 13px; font-weight: 500;
+    cursor: pointer; font-family: var(--ff-body); transition: all 0.2s; text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--water-pale); transform: translateY(-1px); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.88);
+    border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 11px 22px;
+    font-size: 13px; cursor: pointer; font-family: var(--ff-body);
+    transition: all 0.2s; text-decoration: none;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.15); }
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: var(--white); border-bottom: 1px solid var(--border);
+  }
+  .stat-item {
+    padding: 1.5rem 2rem; border-right: 1px solid var(--border); transition: background 0.2s;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item:hover { background: var(--water-pale); }
+  .stat-num { font-family: var(--ff-display); font-size: 2.2rem; color: var(--water-deep); line-height: 1; margin-bottom: 5px; }
+  .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  @media (max-width: 700px) {
+    .hero { padding: 4rem 1.5rem 4rem; }
+    h1 { font-size: 2.3rem; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span>Ihr örtlicher Wasserversorger</div>
+    <h1>Sauberes Wasser für <em>die Region Ilmtal</em></h1>
+    <p class="hero-sub">Der Zweckverband Wasserversorgung Ilmtalgruppe versorgt Geisenfeld, Wolnzach, Pfaffenhofen und Rohrbach mit bestem Trinkwasser aus der Region – zuverlässig und rund um die Uhr.</p>
+    <div class="hero-actions">
+      <a href="https://service-portal.komuna.net" target="_blank" class="btn-primary">Online-Service Portal</a>
+      <a href="#aktuelles" class="btn-ghost">Aktuelle Hinweise</a>
+    </div>
+  </div>
+  <svg class="hero-waves" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 45 Q360 10 720 45 Q1080 80 1440 45 L1440 90 L0 90 Z" fill="white" opacity="0.07"/>
+    <path d="M0 58 Q360 22 720 58 Q1080 94 1440 58 L1440 90 L0 90 Z" fill="white" opacity="0.12"/>
+    <path d="M0 72 Q360 45 720 72 Q1080 99 1440 72 L1440 90 L0 90 Z" fill="white"/>
+  </svg>
+</div>
+
+<div class="stats-bar">
+  {stats.map(s => (
+    <div class="stat-item">
+      <div class="stat-num">{s.value}</div>
+      <div class="stat-label">{s.label}</div>
+    </div>
+  ))}
+</div>

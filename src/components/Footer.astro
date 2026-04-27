@@ -1,0 +1,25 @@
+---
+---
+<style>
+  footer {
+    background: var(--water-deep); color: rgba(255,255,255,0.55);
+    padding: 2.25rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem; font-size: 12px;
+  }
+  .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: white; }
+  @media (max-width: 700px) { footer { flex-direction: column; gap: 0.75rem; } }
+</style>
+
+<footer>
+  <div>© {new Date().getFullYear()} Zweckverband Wasserversorgung Ilmtalgruppe · Körperschaft des öffentlichen Rechts · Starzhausen</div>
+  <div class="footer-links">
+    <a href="/impressum">Impressum</a>
+    <a href="/datenschutz">Datenschutz</a>
+    <a href="/sitzungstermine">Sitzungstermine</a>
+    <a href="/verbandsorgane">Verbandsorgane</a>
+    <a href="/neuherstellungsbeitrag">Neuherstellungsbeitrag</a>
+  </div>
+</footer>
