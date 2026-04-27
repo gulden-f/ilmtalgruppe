@@ -1,16 +1,11 @@
 backend:
-  name: github
-  repo: gulden-f/ilmtalgruppe-website
+  name: git-gateway
   branch: main
-
-# Uncomment for local development without GitHub auth:
-# local_backend: true
 
 media_folder: "public/images"
 public_folder: "/images"
 
 collections:
-  # ── NOTICES (Hinweise / Bekanntmachungen) ──────────────────────────────
   - name: "notices"
     label: "Hinweise & Aktuelles"
     label_singular: "Hinweis"
@@ -24,7 +19,6 @@ collections:
       - { label: "Inhalt", name: "body", widget: "markdown" }
       - { label: "Datum", name: "date", widget: "datetime" }
 
-  # ── OPENING HOURS ───────────────────────────────────────────────────────
   - name: "settings"
     label: "Einstellungen"
     files:
@@ -58,7 +52,6 @@ collections:
               - { label: "Zahl / Wert", name: "value", widget: "string" }
               - { label: "Beschriftung", name: "label", widget: "string" }
 
-  # ── TEAM ────────────────────────────────────────────────────────────────
   - name: "team"
     label: "Team / Ansprechpartner"
     label_singular: "Person"
@@ -71,17 +64,4 @@ collections:
       - { label: "Telefon", name: "phone", widget: "string" }
       - { label: "E-Mail", name: "email", widget: "string", required: false }
       - { label: "Abteilung", name: "department", widget: "select", options: ["Leitung", "Verwaltung", "Technik", "Datenschutz"] }
-      - { label: "Reihenfolge", name: "order", widget: "number", default: 99 }
-
-  # ── SERVICES ────────────────────────────────────────────────────────────
-  - name: "services"
-    label: "Leistungen"
-    label_singular: "Leistung"
-    folder: "src/content/services"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "Titel", name: "title", widget: "string" }
-      - { label: "Beschreibung", name: "description", widget: "text" }
-      - { label: "Icon (SVG path)", name: "icon", widget: "string", required: false }
       - { label: "Reihenfolge", name: "order", widget: "number", default: 99 }
