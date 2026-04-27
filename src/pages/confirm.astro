@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Konto bestätigen – Ilmtalgruppe">
+  <div class="confirm-wrap">
+    <div class="confirm-card">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="28" height="28">
+          <path d="M12 2c0 0-8 6.5-8 12a8 8 0 0 0 16 0C20 8.5 12 2 12 2z"/>
+        </svg>
+      </div>
+      <h1>Konto aktivieren</h1>
+      <p>Bitte warten Sie einen Moment...</p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .confirm-wrap {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--surface);
+  }
+  .confirm-card {
+    background: white; border: 1px solid var(--border);
+    border-radius: 16px; padding: 2.5rem;
+    text-align: center; max-width: 400px; width: 90%;
+  }
+  .logo {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--water-deep);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  h1 { font-family: var(--ff-display); font-size: 1.6rem; color: var(--water-deep); margin-bottom: 0.5rem; }
+  p { font-size: 14px; color: var(--text-soft); }
+</style>
+
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', (user) => {
+      if (!user) window.netlifyIdentity.open();
+    });
+    window.netlifyIdentity.on('login', () => {
+      document.location.href = '/admin/';
+    });
+  }
+</script>
